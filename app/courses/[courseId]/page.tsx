@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCourseWithLessons, getCourses } from "@/lib/api/courses";
+import { ApiError } from "@/lib/api/client";
 import CourseBanner from "@/components/courses/course-banner";
 import CourseCard from "@/components/courses/course-card";
-import Button from "@/components/ui/button";
+import EnrollButton from "@/components/courses/enroll-button";
 import { formatNumber } from "@/lib/utils";
+import type { Course, Lesson } from "@/lib/types";
 
 interface CourseDetailPageProps {
   params: Promise<{ courseId: string }>;
@@ -15,15 +17,57 @@ export default async function CourseDetailPage({
 }: CourseDetailPageProps) {
   const { courseId } = await params;
 
-  let course;
-  let lessons;
+  let course: Course | null = null;
+  let lessons: Lesson[] = [];
+  let unavailable = false;
   try {
     ({ course, lessons } = await getCourseWithLessons(courseId));
-  } catch {
-    notFound();
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) {
+      notFound();
+    }
+    unavailable = true;
   }
 
-  const allCourses = await getCourses();
+  if (unavailable || !course) {
+    return (
+      <section className="bg-white py-20">
+        <div className="mx-auto max-w-xl px-4 text-center sm:px-6">
+          <p className="text-sm font-medium uppercase tracking-widest text-brand-600">
+            Something went wrong
+          </p>
+          <h1 className="mt-3 font-serif text-3xl font-semibold tracking-tight text-slate-900">
+            We couldn&apos;t load this course
+          </h1>
+          <p className="mt-3 text-base leading-relaxed text-slate-600">
+            Our servers are unreachable right now. Please try again in a
+            moment.
+          </p>
+          <div className="mt-8 flex items-center justify-center gap-3">
+            <Link
+              href={`/courses/${courseId}`}
+              className="inline-flex h-11 items-center justify-center rounded-lg bg-brand-600 px-6 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
+            >
+              Try again
+            </Link>
+            <Link
+              href="/courses"
+              className="inline-flex h-11 items-center justify-center rounded-lg border border-brand-600 px-6 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-100"
+            >
+              Browse courses
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  let allCourses: Awaited<ReturnType<typeof getCourses>> = [];
+  try {
+    allCourses = await getCourses();
+  } catch {
+    // related courses are optional; keep them empty if the API is unreachable
+  }
   const related = allCourses.filter((item) => item.id !== course.id).slice(0, 3);
 
   return (
@@ -123,9 +167,7 @@ export default async function CourseDetailPage({
                     </span>
                   </div>
                 </div>
-                <Button href="/login" className="mt-7 w-full">
-                  Enroll Now
-                </Button>
+                <EnrollButton courseId={course.id} />
               </div>
             </div>
           </aside>

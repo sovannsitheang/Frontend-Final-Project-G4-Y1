@@ -5,7 +5,7 @@ export default function HeaderLogo() {
     <Link
       href="/"
       className="flex items-center gap-2.5"
-      aria-label="Duraseksa - Home"
+      aria-label="G4-Learning - Home"
     >
       <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-700 text-white">
         <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden="true">
@@ -16,7 +16,7 @@ export default function HeaderLogo() {
       <span className="flex flex-col leading-none">
         <span className="text-lg font-bold tracking-tight text-brand-800">G4-Learning</span>
         <span className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
-          E-Learning · MOEYS
+          E-Learning Platform
         </span>
       </span>
     </Link>

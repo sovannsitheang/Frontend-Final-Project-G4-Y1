@@ -4,7 +4,7 @@ const contactMethods = [
   {
     icon: "location",
     title: "Address",
-    lines: ["Ministry of Education, Youth and Sport", "Phnom Penh, Cambodia"],
+    lines: ["Phnom Penh, Cambodia"],
   },
   {
     icon: "mail",
@@ -26,7 +26,7 @@ export default function ContactPage() {
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
             Contact Us
           </h1>
-          <p className="mx-auto mt-3 max-w-xl text-blue-100">
+          <p className="mx-auto mt-3 max-w-xl text-white/90">
             Questions, feedback or technical support — we are here to help.
           </p>
         </div>

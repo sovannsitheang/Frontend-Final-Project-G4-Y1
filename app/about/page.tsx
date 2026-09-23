@@ -4,7 +4,7 @@ const milestones = [
   {
     year: "2020",
     title: "Launch of Duraseksa",
-    text: "Duraseksa is launched by the Ministry of Education, Youth and Sport to support distance learning during school closures.",
+    text: "Duraseksa is launched as a free e-Learning platform to support distance learning during school closures.",
   },
   {
     year: "2021",
@@ -31,9 +31,8 @@ export default function AboutPage() {
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
             About G4-Learning
           </h1>
-          <p className="mx-auto mt-3 max-w-xl text-blue-100">
-            The official E-LEARNING platform of the Ministry of Education,
-            Youth and Sport of Cambodia.
+          <p className="mx-auto mt-3 max-w-xl text-white/90">
+            A free e-Learning platform for every student.
           </p>
         </div>
       </section>
@@ -50,9 +49,8 @@ export default function AboutPage() {
               G4-Learning — a name that blends the Khmer words for{" "}
               <strong className="font-semibold text-slate-900">digital</strong>{" "}
               and <strong className="font-semibold text-slate-900">learning</strong> —
-              is the national Learning Management System operated by the
-              Ministry of Education, Youth and Sport (MoEYS) of the Kingdom of
-              Cambodia.
+              is an e-Learning platform offering free courses for students
+              across Cambodia.
             </p>
             <p>
               The platform delivers free video lessons, exercises and digital

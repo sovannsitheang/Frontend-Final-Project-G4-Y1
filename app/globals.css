@@ -2,23 +2,27 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #0f172a;
-  --brand-600: #1d4ed8;
-  --brand-700: #1e40af;
-  --brand-800: #1e3a8a;
+  --foreground: #000000;
+  --brand-600: #1f4d94;
+  --brand-700: #193d77;
+  --brand-800: #142f5c;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-brand-100: #dbeafe;
-  --color-brand-300: #93c5fd;
-  --color-brand-500: #3b82f6;
+  --color-brand-50: #eef3fa;
+  --color-brand-100: #d9e4f5;
+  --color-brand-300: #a3bfe6;
+  --color-brand-500: #3b6fc4;
   --color-brand-600: var(--brand-600);
   --color-brand-700: var(--brand-700);
   --color-brand-800: var(--brand-800);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-honeydew: #eef4fb;
+  --color-forest: #0a1a33;
+  --font-sans: var(--font-poppins);
+  --font-serif: var(--font-playfair);
+  --font-mono: var(--font-poppins);
 }
 
 html {
@@ -28,7 +32,7 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
 }
 
 .line-clamp-2 {
