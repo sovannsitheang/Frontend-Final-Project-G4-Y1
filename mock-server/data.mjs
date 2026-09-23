@@ -554,6 +554,8 @@ const courses = rawCourses.map((course, index) => ({
     { length: ((index + 1) * 137) % 420 + 25 },
     () => ({}),
   ),
+  materials: [],
+  quizzes: [],
   lessons: course.lessons.map((l) => l._id),
 }));
 
@@ -565,9 +567,140 @@ export function getCourse(id) {
   return courses.find((course) => course._id === id) ?? null;
 }
 
+export function getRawCourse(id) {
+  return rawCourses.find((c) => c._id === id) ?? null;
+}
+
 export function getLessons(id) {
-  const course = getCourse(id);
-  if (!course) return null;
-  const raw = rawCourses.find((c) => c._id === id);
+  const raw = getRawCourse(id);
+  if (!raw) return null;
   return raw.lessons.map((l) => ({ ...l, course: id }));
+}
+
+function newId() {
+  return Math.random().toString(16).slice(2, 14);
+}
+
+function syncSummary(raw) {
+  const course = courses.find((c) => c._id === raw._id);
+  if (course) {
+    course.title = raw.title;
+    course.description = raw.description;
+    course.thumbnail = raw.thumbnail;
+  }
+}
+
+export function addCourse(input = {}) {
+  const title = typeof input.title === "string" ? input.title.trim() : "";
+  const description =
+    typeof input.description === "string" ? input.description.trim() : "";
+  if (!title || !description) return null;
+
+  const raw = {
+    _id: newId(),
+    title,
+    description,
+    thumbnail:
+      typeof input.thumbnail === "string" && input.thumbnail.trim()
+        ? input.thumbnail.trim()
+        : undefined,
+    lessons: [],
+  };
+  rawCourses.push(raw);
+  courses.push({
+    _id: raw._id,
+    title: raw.title,
+    description: raw.description,
+    thumbnail: raw.thumbnail,
+    enrolledStudents: [],
+    materials: [],
+    quizzes: [],
+    lessons: [],
+  });
+  return { ...raw };
+}
+
+export function patchCourse(id, updates = {}) {
+  const raw = getRawCourse(id);
+  if (!raw) return null;
+  if (typeof updates.title === "string" && updates.title.trim()) {
+    raw.title = updates.title.trim();
+  }
+  if (typeof updates.description === "string" && updates.description.trim()) {
+    raw.description = updates.description.trim();
+  }
+  if (updates.thumbnail !== undefined) {
+    raw.thumbnail =
+      typeof updates.thumbnail === "string" && updates.thumbnail.trim()
+        ? updates.thumbnail.trim()
+        : undefined;
+  }
+  syncSummary(raw);
+  return { ...raw };
+}
+
+export function removeCourse(id) {
+  const i = rawCourses.findIndex((c) => c._id === id);
+  const j = courses.findIndex((c) => c._id === id);
+  if (i === -1 || j === -1) return false;
+  rawCourses.splice(i, 1);
+  courses.splice(j, 1);
+  return true;
+}
+
+export function addLessons(courseId, input) {
+  const raw = getRawCourse(courseId);
+  const course = getCourse(courseId);
+  if (!raw || !course) return null;
+  const list = Array.isArray(input) ? input : [input];
+  const created = [];
+  for (const item of list) {
+    const title = typeof item?.title === "string" ? item.title.trim() : "";
+    const content =
+      typeof item?.content === "string" ? item.content.trim() : "";
+    if (!title || !content) continue;
+    const lesson = { _id: newId(), title, content };
+    raw.lessons.push(lesson);
+    course.lessons.push(lesson._id);
+    created.push(lesson);
+  }
+  return { ...course, lessons: course.lessons };
+}
+
+export function patchLesson(courseId, lessonId, updates = {}) {
+  const raw = getRawCourse(courseId);
+  if (!raw) return null;
+  const lesson = raw.lessons.find((l) => l._id === lessonId);
+  if (!lesson) return null;
+  if (typeof updates.title === "string" && updates.title.trim()) {
+    lesson.title = updates.title.trim();
+  }
+  if (typeof updates.content === "string" && updates.content.trim()) {
+    lesson.content = updates.content.trim();
+  }
+  return { ...lesson, course: courseId };
+}
+
+export function removeLesson(courseId, lessonId) {
+  const raw = getRawCourse(courseId);
+  const course = getCourse(courseId);
+  if (!raw || !course) return false;
+  const before = raw.lessons.length;
+  raw.lessons = raw.lessons.filter((l) => l._id !== lessonId);
+  course.lessons = course.lessons.filter((id) => id !== lessonId);
+  return raw.lessons.length !== before;
+}
+
+export function addEnrolledStudent(courseId) {
+  const course = getCourse(courseId);
+  if (!course) return false;
+  course.enrolledStudents.push({});
+  return true;
+}
+
+export function addMaterial(courseId) {
+  const course = getCourse(courseId);
+  if (!course) return false;
+  course.materials.push({ _id: newId(), name: "uploaded-file" });
+  return true;
 }

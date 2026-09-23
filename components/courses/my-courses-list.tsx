@@ -78,7 +78,7 @@ export default function MyCoursesList({ courses }: { courses: Course[] }) {
           <button
             type="button"
             onClick={() => toggleEnrollment(course.id)}
-            className="mx-auto mt-3 inline-flex h-9 items-center rounded-lg border border-slate-300 px-4 text-sm font-medium text-slate-600 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-700"
+            className="mx-auto mt-3 inline-flex h-9 cursor-pointer items-center rounded-lg border border-slate-300 px-4 text-sm font-medium text-slate-600 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-700"
           >
             Unenroll
           </button>

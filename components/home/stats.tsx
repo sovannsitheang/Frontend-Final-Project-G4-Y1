@@ -34,8 +34,11 @@ export default async function Stats() {
               the world.
             </p>
             <div className="mt-8 flex items-center gap-3">
-              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-600 text-lg font-semibold text-white">
-                ក
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-700 text-white">
+                <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden="true">
+                  <path d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3z" />
+                  <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" />
+                </svg>
               </span>
               <div>
                 <p className="text-sm font-semibold text-slate-900">

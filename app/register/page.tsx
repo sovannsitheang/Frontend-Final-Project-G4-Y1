@@ -95,6 +95,7 @@ export default function RegisterPage() {
                 <option value="teacher">Teacher</option>
                 <option value="parent">Parent</option>
                 <option value="citizen">Citizen / Lifelong learner</option>
+                <option value="admin">Admin</option>
               </select>
             </label>
             <label className="block">

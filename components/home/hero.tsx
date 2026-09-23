@@ -89,7 +89,7 @@ export default function Hero({ suggestions = [] }: HeroProps) {
               Quality education at your fingertips
             </p>
             <h2 className="relative mt-4 font-serif text-2xl leading-snug text-white sm:text-3xl">
-              &ldquo;Education is no longer a place you go; it is everywhere you are.&rdquo;
+              &ldquo;Education is no longer a place you go, it is everywhere you are.&rdquo;
             </h2>
             <p className="relative mt-5 max-w-md text-sm leading-relaxed text-blue-50">
               Every lesson is written and reviewed by experienced educators, so
@@ -108,10 +108,6 @@ export default function Hero({ suggestions = [] }: HeroProps) {
               </span>
             </div>
           </div>
-          <div
-            className="pointer-events-none absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-honeydew"
-            aria-hidden="true"
-          />
         </div>
       </div>
     </section>

@@ -14,7 +14,7 @@ const contactMethods = [
   {
     icon: "phone",
     title: "Phone",
-    lines: ["+855 23 219 219", "+855 23 210 801"],
+    lines: ["+855 88 888 888", "+855 99 999 999"],
   },
 ];
 

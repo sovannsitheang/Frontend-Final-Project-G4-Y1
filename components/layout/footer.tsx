@@ -24,7 +24,7 @@ export default async function Footer() {
           </p>
           <div className="mt-6 space-y-2 text-sm text-white">
             <p>Phnom Penh, Cambodia</p>
-            <p>info@g4-learning.org</p>
+            <p>g4learning@gmail.com</p>
           </div>
         </div>
         <div>

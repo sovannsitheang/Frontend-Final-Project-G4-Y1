@@ -96,6 +96,22 @@ export function getEnrolledSnapshot(): Set<string> {
   return cachedEnrolled;
 }
 
+export function addEnrollment(courseId: string): void {
+  const enrolled = new Set(readEnrolled());
+  enrolled.add(courseId);
+  localStorage.setItem(ENROLLED_KEY, JSON.stringify(Array.from(enrolled)));
+  cachedEnrolled = enrolled;
+  notifyEnrolled();
+}
+
+export function removeEnrollment(courseId: string): void {
+  const enrolled = new Set(readEnrolled());
+  enrolled.delete(courseId);
+  localStorage.setItem(ENROLLED_KEY, JSON.stringify(Array.from(enrolled)));
+  cachedEnrolled = enrolled;
+  notifyEnrolled();
+}
+
 export function toggleEnrollment(courseId: string): boolean {
   const enrolled = readEnrolled();
   let nowEnrolled: boolean;

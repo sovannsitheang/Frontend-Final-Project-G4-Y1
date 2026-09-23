@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { apiGet } from "@/lib/api/client";
+import { apiDelete, apiGet, apiPatch, apiPost, apiUpload } from "@/lib/api/client";
 import type { Course, Lesson } from "@/lib/types";
 
 interface ApiLesson {
@@ -15,6 +15,8 @@ interface ApiCourse {
   description: string;
   thumbnail?: string;
   enrolledStudents?: unknown[];
+  materials?: unknown[];
+  quizzes?: unknown[];
   lessons?: string[] | ApiLesson[];
 }
 
@@ -64,16 +66,81 @@ export const getCourse = cache(async (id: string): Promise<Course> => {
 });
 
 export const getCourseWithLessons = cache(
-  async (id: string): Promise<{ course: Course; lessons: Lesson[] }> => {
+  async (id: string): Promise<{ course: Course; lessons: Lesson[]; materialsCount: number }> => {
     const data = await apiGet<ApiCourse & { lessons: ApiLesson[] }>(
       `/api/courses/${id}/lessons`,
     );
     return {
       course: toCourse(data),
       lessons: toLessons(id, data.lessons ?? []),
+      materialsCount: data.materials?.length ?? 0,
     };
   },
 );
+
+export interface CourseInput {
+  title: string;
+  description: string;
+  thumbnail?: string;
+}
+
+export interface LessonInput {
+  title: string;
+  content: string;
+}
+
+export async function createCourse(input: CourseInput): Promise<Course | null> {
+  const data = await apiPost<ApiCourse | ApiCourse[] | null>("/api/courses", input);
+  const created = Array.isArray(data) ? data[0] : data;
+  return created ? toCourse(created) : null;
+}
+
+export async function updateCourse(
+  id: string,
+  input: Partial<CourseInput>,
+): Promise<Course | null> {
+  const data = await apiPatch<ApiCourse | null>(`/api/courses/${id}`, input);
+  return data ? toCourse(data) : null;
+}
+
+export async function deleteCourse(id: string): Promise<void> {
+  await apiDelete(`/api/courses/${id}`);
+}
+
+export async function enrollCourse(id: string): Promise<void> {
+  await apiPost(`/api/courses/${id}/enroll`, {});
+}
+
+export async function uploadCourseMaterial(
+  id: string,
+  file: File | Blob,
+): Promise<void> {
+  const formData = new FormData();
+  formData.append("materials", file);
+  await apiUpload(`/api/courses/${id}/materials`, formData);
+}
+
+export async function createLessons(
+  courseId: string,
+  lessons: LessonInput[],
+): Promise<void> {
+  await apiPost(`/api/courses/${courseId}/lessons`, lessons);
+}
+
+export async function updateLesson(
+  courseId: string,
+  lessonId: string,
+  input: Partial<LessonInput>,
+): Promise<void> {
+  await apiPatch(`/api/courses/${courseId}/lessons/${lessonId}`, input);
+}
+
+export async function deleteLesson(
+  courseId: string,
+  lessonId: string,
+): Promise<void> {
+  await apiDelete(`/api/courses/${courseId}/lessons/${lessonId}`);
+}
 
 const TITLE_FILLER_WORDS = new Set([
   "intro",
